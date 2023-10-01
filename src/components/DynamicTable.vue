@@ -33,7 +33,7 @@
             {{ item[text.toLowerCase()] }}
           </td>
           <td class="action-dots">
-            <span @click="setOpenedAction(item.id)">...</span>
+            <div @click="setOpenedAction(item.id)" unselectable="true">...</div>
             <!-- menu -->
             <ul v-if="openedAction === item.id">
               <li>
@@ -117,7 +117,7 @@ table th,
 table td {
   padding: 0.75rem;
   vertical-align: top;
-  border-top: 1px solid #dee2e6;
+  border-bottom: 1px solid #dee2e6;
 }
 
 table thead th {
@@ -131,13 +131,11 @@ tbody tr:hover {
 }
 
 .action-dots {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
 }
 
-.action-dots > span {
+.action-dots > div {
+  margin: auto;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -147,13 +145,18 @@ tbody tr:hover {
   line-height: 27px;
   font-size: 26px;
   transition: all 0.15s linear;
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
 }
 
-.action-dots > span:hover {
+.action-dots > div:hover {
   background-color: #ececec;
 }
 
-.action-dots > span:active {
+.action-dots > div:active {
   background-color: #c2c0c0;
 }
 
