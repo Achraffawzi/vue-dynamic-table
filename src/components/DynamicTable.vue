@@ -12,8 +12,16 @@
               @change="setSelectedItems(null)"
             />
           </th>
-          <th v-for="{ text } in headers" :key="text">
+          <th
+            v-for="{ text, sortable } in headers"
+            :key="text"
+            :class="[sortable ? 'th-sortable' : '']"
+          >
             {{ text }}
+            <div class="icon-sort-container" v-if="sortable">
+              <span class="icon-sort" @click="sortBy(text, 'asc')">asc</span>
+              <span class="icon-sort" @click="sortBy(text, 'desc')">desc</span>
+            </div>
           </th>
           <th>Actions</th>
         </tr>
@@ -37,11 +45,11 @@
             <!-- menu -->
             <ul v-if="openedAction === item.id">
               <li>
-                <!-- <font-awesome-icon :icon="['fas', 'pen']" /> -->
+                <!-- <i class="pi pi-check"></i> -->
                 <span>Edit</span>
               </li>
               <li>
-                <!-- <font-awesome-icon :icon="['fas', 'pen']" /> -->
+                <!-- <i class="pi pi-check"></i> -->
                 <span>Delete</span>
               </li>
             </ul>
@@ -53,7 +61,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, computed } from "vue";
+import { defineProps, ref } from "vue";
 
 const props = defineProps({
   headers: {
@@ -81,6 +89,18 @@ const openedAction = ref(null);
 
 const isChecked = (id) => {
   return selectedItems.value.includes(id);
+};
+
+const sortBy = (header, order) => {
+  props.data.sort((a, b) => {
+    if (a[header.toLowerCase()] < b[header.toLowerCase()]) {
+      return order === "asc" ? -1 : 1;
+    }
+    if (a[header.toLowerCase()] > b[header.toLowerCase()]) {
+      return order === "asc" ? 1 : -1;
+    }
+    return 0;
+  });
 };
 
 const setSelectedItems = (id) => {
@@ -124,6 +144,24 @@ table thead th {
   vertical-align: bottom;
   border-bottom: 2px solid #dee2e6;
   background-color: #f8f9fa;
+}
+
+.th-sortable {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icon-sort-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.icon-sort {
+  font-size: 10px;
+  font-weight: normal;
 }
 
 tbody tr:hover {
