@@ -5,63 +5,69 @@
       v-model="searchQuery"
       @update:modelValue="handleInputSearchUpdate($event)"
     />
-    <table>
-      <thead>
-        <tr>
-          <th v-if="isSelectable">
-            <input
-              type="checkbox"
-              name="selectAll"
-              id="selectAll"
-              :checked="areAllSelected"
-              @change="setSelectedItems(null)"
-            />
-          </th>
-          <th
-            v-for="{ text, sortable } in headers"
-            :key="text"
-            :class="[sortable ? 'th-sortable' : '']"
-          >
-            {{ text }}
-            <div class="icon-sort-container" v-if="sortable">
-              <span class="icon-sort" @click="sortBy(text, 'asc')">asc</span>
-              <span class="icon-sort" @click="sortBy(text, 'desc')">desc</span>
-            </div>
-          </th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in dataCopy" :key="item.id">
-          <td v-if="isSelectable">
-            <input
-              type="checkbox"
-              :name="`selected-name-${item.id}`"
-              :id="`selected-id-${item.id}`"
-              @change="setSelectedItems(item.id)"
-              :checked="isChecked(item.id)"
-            />
-          </td>
-          <td v-for="{ text } in headers" :key="text">
-            {{ item[text.toLowerCase()] }}
-          </td>
-          <td class="action-dots">
-            <div @click="setOpenedAction(item.id)" unselectable="true">...</div>
-            <!-- menu -->
-            <ul v-if="openedAction === item.id">
-              <li>
-                <!-- <i class="pi pi-check"></i> -->
-                <span>Edit</span>
-              </li>
-              <li>
-                <!-- <i class="pi pi-check"></i> -->
-                <span>Delete</span>
-              </li>
-            </ul>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th v-if="isSelectable">
+              <input
+                type="checkbox"
+                name="selectAll"
+                id="selectAll"
+                :checked="areAllSelected"
+                @change="setSelectedItems(null)"
+              />
+            </th>
+            <th
+              v-for="{ text, sortable } in headers"
+              :key="text"
+              :class="[sortable ? 'th-sortable' : '']"
+            >
+              {{ text }}
+              <div class="icon-sort-container" v-if="sortable">
+                <span class="icon-sort" @click="sortBy(text, 'asc')">asc</span>
+                <span class="icon-sort" @click="sortBy(text, 'desc')"
+                  >desc</span
+                >
+              </div>
+            </th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in dataCopy" :key="item.id">
+            <td v-if="isSelectable">
+              <input
+                type="checkbox"
+                :name="`selected-name-${item.id}`"
+                :id="`selected-id-${item.id}`"
+                @change="setSelectedItems(item.id)"
+                :checked="isChecked(item.id)"
+              />
+            </td>
+            <td v-for="{ text } in headers" :key="text">
+              {{ item[text.toLowerCase()] }}
+            </td>
+            <td class="action-dots">
+              <div @click="setOpenedAction(item.id)" unselectable="true">
+                ...
+              </div>
+              <!-- menu -->
+              <ul v-if="openedAction === item.id">
+                <li>
+                  <!-- <i class="pi pi-check"></i> -->
+                  <span>Edit</span>
+                </li>
+                <li>
+                  <!-- <i class="pi pi-check"></i> -->
+                  <span>Delete</span>
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -155,12 +161,36 @@ const setOpenedAction = (id) => {
 </script>
 
 <style scoped>
+.table-container {
+  overflow-x: auto;
+}
+
 table {
   width: 100%;
   margin-bottom: 1rem;
   background-color: #fff;
   border-collapse: collapse;
   text-align: center;
+}
+
+table tr th:first-child,
+table tr th:nth-child(2),
+table tr td:first-child,
+table tr td:nth-child(2) {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background-color: #fff;
+}
+
+table tr th:first-child,
+table tr th:nth-child(2) {
+  background-color: #f8f9fa;
+}
+
+table tr th:nth-child(2),
+table tr td:nth-child(2) {
+  left: 37px;
 }
 
 table th,
