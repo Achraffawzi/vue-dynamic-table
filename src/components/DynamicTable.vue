@@ -1,5 +1,10 @@
 <template>
   <div>
+    <!-- search -->
+    <InputSearch
+      v-model="searchQuery"
+      @update:modelValue="handleInputSearchUpdate($event)"
+    />
     <table>
       <thead>
         <tr>
@@ -27,7 +32,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in data" :key="item.id">
+        <tr v-for="item in dataCopy" :key="item.id">
           <td v-if="isSelectable">
             <input
               type="checkbox"
@@ -61,7 +66,8 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from "vue";
+import { computed, defineProps, ref } from "vue";
+import InputSearch from "./InputSearch.vue";
 
 const props = defineProps({
   headers: {
@@ -83,16 +89,40 @@ const props = defineProps({
   },
 });
 
+const filteredData = computed(() => {
+  return props.data.filter((item) => {
+    return filteredKeys.some((key) => {
+      return String(item[key])
+        .toLowerCase()
+        .includes(searchQuery.value.toLowerCase());
+    });
+  });
+});
+
+const dataCopy = ref(props.data);
 const selectedItems = ref([]);
 const areAllSelected = ref(false);
 const openedAction = ref(null);
+const searchQuery = ref("");
+const filteredKeys = ["name", "phone", "email", "company"];
+
+const handleInputSearchUpdate = (value) => {
+  searchQuery.value = value;
+  dataCopy.value = props.data.filter((item) => {
+    return filteredKeys.some((key) => {
+      return String(item[key])
+        .toLowerCase()
+        .includes(searchQuery.value.toLowerCase());
+    });
+  });
+};
 
 const isChecked = (id) => {
   return selectedItems.value.includes(id);
 };
 
 const sortBy = (header, order) => {
-  props.data.sort((a, b) => {
+  dataCopy.value.sort((a, b) => {
     if (a[header.toLowerCase()] < b[header.toLowerCase()]) {
       return order === "asc" ? -1 : 1;
     }
@@ -107,7 +137,7 @@ const setSelectedItems = (id) => {
   if (id === null) {
     areAllSelected.value = !areAllSelected.value;
     selectedItems.value = areAllSelected.value
-      ? props.data.map((item) => item.id)
+      ? filteredData.value.map((item) => item.id)
       : [];
   } else {
     if (areAllSelected.value) {
