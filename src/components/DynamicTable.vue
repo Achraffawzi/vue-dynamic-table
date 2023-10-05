@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ dataCopy.length }}
     <!-- search -->
     <InputSearch
       v-model="searchQuery"
@@ -68,11 +69,22 @@
         </tbody>
       </table>
     </div>
+    <!-- pagination -->
+    <div class="pagination-container">
+      <div class="rows-counter-container">
+        <span>Rows per page:</span>
+        <select @change="handleRowsPerPageChange($event)">
+          <option v-for="option in pagination.rowsPerPage" :key="option">
+            {{ option }}
+          </option>
+        </select>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { computed, defineProps, ref } from "vue";
+import { computed, defineProps, ref, defineEmits, watch } from "vue";
 import InputSearch from "./InputSearch.vue";
 
 const props = defineProps({
@@ -95,6 +107,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(["rowPerPageChange"]);
+
 const filteredData = computed(() => {
   return props.data.filter((item) => {
     return filteredKeys.some((key) => {
@@ -105,12 +119,17 @@ const filteredData = computed(() => {
   });
 });
 
-const dataCopy = ref(props.data);
+const dataCopy = computed(() => props.data);
 const selectedItems = ref([]);
 const areAllSelected = ref(false);
 const openedAction = ref(null);
 const searchQuery = ref("");
 const filteredKeys = ["name", "phone", "email", "company"];
+
+watch(props.data, (newValue, oldValue) => {
+  console.log("watch run!", newValue, oldValue);
+  // dataCopy.value = newValue;
+});
 
 const handleInputSearchUpdate = (value) => {
   searchQuery.value = value;
@@ -157,6 +176,10 @@ const setSelectedItems = (id) => {
 
 const setOpenedAction = (id) => {
   openedAction.value = openedAction.value === id ? null : id;
+};
+
+const handleRowsPerPageChange = ({ target }) => {
+  emit("rowPerPageChange", target.value);
 };
 </script>
 
@@ -224,7 +247,11 @@ table thead th {
   font-weight: normal;
 }
 
-tbody tr:hover {
+tbody tr:hover,
+tbody tr:hover th:first-child,
+tbody tr:hover th:nth-child(2),
+tbody tr:hover td:first-child,
+tbody tr:hover td:nth-child(2) {
   background-color: #f8f9fa;
 }
 
@@ -286,5 +313,30 @@ tbody tr:hover {
 
 .action-dots > ul > li:hover {
   background-color: #ececec;
+}
+
+/* pagination */
+
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 0.6rem;
+  padding-inline: 30px;
+}
+
+.rows-counter-container {
+  display: flex;
+  align-items: center;
+}
+
+.rows-counter-container > span {
+  margin-right: 0.5rem;
+}
+
+.rows-counter-container > select {
+  padding: 5px 8px;
+  width: 80px;
 }
 </style>

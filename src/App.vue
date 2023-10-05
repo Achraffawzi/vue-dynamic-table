@@ -2,16 +2,17 @@
   <div>
     <DynamicTable
       :headers="headers"
-      :data="data"
+      :data="dataCopy"
       :pagination="pagination"
       :is-selectable="isSelectable"
+      @row-per-page-change="handleRowsPerPageChange($event)"
     />
   </div>
 </template>
 
 <script setup>
 import DynamicTable from "@/components/DynamicTable.vue";
-import { ref } from "vue";
+import { ref, onBeforeMount } from "vue";
 
 const headers = ref([
   {
@@ -58,15 +59,531 @@ const data = ref([
     phone: "1-463-123-4447",
     company: "Romaguera-Jacobson",
   },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 2,
+    name: "Ervin Howell",
+    email: "Ervin@gmail.com",
+    phone: "010-692-6593 x09125",
+    company: "Deckow-Crist",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
+  {
+    id: 3,
+    name: "Clementine Bauch",
+    email: "clementine@gmail.com",
+    phone: "1-463-123-4447",
+    company: "Romaguera-Jacobson",
+  },
 ]);
+
+const dataCopy = ref(data.value);
 
 const pagination = ref({
   page: 1,
-  limit: 2,
-  totalPages: 2,
+  limit: 5,
+  totalPages: 73,
+  rowsPerPage: [5, 10, 15, 20],
 });
 
 const isSelectable = ref(true);
+
+// function to slice data based on pagination
+const getPaginatedData = (data, page, limit) => {
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  return data.slice(startIndex, endIndex);
+};
+onBeforeMount(() => {
+  dataCopy.value = getPaginatedData(
+    data.value,
+    pagination.value.page,
+    pagination.value.limit
+  );
+});
+
+const handleRowsPerPageChange = (value) => {
+  pagination.value.limit = value;
+  dataCopy.value = getPaginatedData(
+    data.value,
+    pagination.value.page,
+    pagination.value.limit
+  );
+};
 </script>
 
 <style>
