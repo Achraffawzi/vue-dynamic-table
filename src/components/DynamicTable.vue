@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ dataCopy.length }}
     <!-- search -->
     <InputSearch
       v-model="searchQuery"
