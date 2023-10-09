@@ -118,17 +118,20 @@ const filteredData = computed(() => {
   });
 });
 
-const dataCopy = computed(() => props.data);
+// const dataCopy = computed(() => props.data);
+const dataCopy = ref(props.data);
 const selectedItems = ref([]);
 const areAllSelected = ref(false);
 const openedAction = ref(null);
 const searchQuery = ref("");
 const filteredKeys = ["name", "phone", "email", "company"];
 
-watch(props.data, (newValue, oldValue) => {
-  console.log("watch run!", newValue, oldValue);
-  // dataCopy.value = newValue;
-});
+watch(
+  () => props.data,
+  (newValue, oldValue) => {
+    dataCopy.value = newValue;
+  }
+);
 
 const handleInputSearchUpdate = (value) => {
   searchQuery.value = value;
@@ -139,6 +142,7 @@ const handleInputSearchUpdate = (value) => {
         .includes(searchQuery.value.toLowerCase());
     });
   });
+  console.log(dataCopy.value);
 };
 
 const isChecked = (id) => {
