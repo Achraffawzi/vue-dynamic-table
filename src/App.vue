@@ -6,6 +6,7 @@
       :pagination="pagination"
       :is-selectable="isSelectable"
       @row-per-page-change="handleRowsPerPageChange($event)"
+      @delete-item="handleDeleteItem($event)"
     />
   </div>
 </template>
@@ -577,6 +578,15 @@ onBeforeMount(() => {
 
 const handleRowsPerPageChange = (value) => {
   pagination.value.limit = value;
+  dataCopy.value = getPaginatedData(
+    data.value,
+    pagination.value.page,
+    pagination.value.limit
+  );
+};
+
+const handleDeleteItem = (item) => {
+  data.value = data.value.filter((dataItem) => dataItem.id !== item.id);
   dataCopy.value = getPaginatedData(
     data.value,
     pagination.value.page,

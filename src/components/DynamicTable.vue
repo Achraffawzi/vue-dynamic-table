@@ -54,11 +54,11 @@
               </div>
               <!-- menu -->
               <ul v-if="openedAction === item.id">
-                <li>
+                <li @click="handleEditItem(item)">
                   <!-- <i class="pi pi-check"></i> -->
                   <span>Edit</span>
                 </li>
-                <li>
+                <li @click="handleDeleteItem(item)">
                   <!-- <i class="pi pi-check"></i> -->
                   <span>Delete</span>
                 </li>
@@ -106,7 +106,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["rowPerPageChange"]);
+const emit = defineEmits(["rowPerPageChange", "deleteItem"]);
 
 const filteredData = computed(() => {
   return props.data.filter((item) => {
@@ -179,6 +179,10 @@ const setSelectedItems = (id) => {
 
 const setOpenedAction = (id) => {
   openedAction.value = openedAction.value === id ? null : id;
+};
+
+const handleDeleteItem = (item) => {
+  emit("deleteItem", item);
 };
 
 const handleRowsPerPageChange = ({ target }) => {
