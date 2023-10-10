@@ -6,14 +6,14 @@
       :item="currentEditItem"
       @handle-update="handleUpdate($event)"
     />
-    <div>
+    <div class="upper">
       <!-- search -->
       <InputSearch
         v-model="searchQuery"
         @update:modelValue="handleInputSearchUpdate($event)"
       />
       <!-- button to export table to excel -->
-      <!-- <button @click="exportToExcel">Export to excel</button> -->
+      <button class="btn-export" @click="exportToExcel">Export to excel</button>
     </div>
     <div class="table-container">
       <table>
@@ -94,7 +94,7 @@
 
 <script setup>
 import { computed, defineProps, ref, defineEmits, watch } from "vue";
-// import * as XLSX from "xlsx";
+import * as XLSX from "xlsx";
 import InputSearch from "./InputSearch.vue";
 import EditModal from "./EditModal.vue";
 
@@ -159,14 +159,14 @@ const handleInputSearchUpdate = (value) => {
   console.log(dataCopy.value);
 };
 
-// const exportToExcel = () => {
-//   const data = dataCopy.value;
-//   const fileName = "clients.xlsx";
-//   const ws = XLSX.utils.json_to_sheet(data);
-//   const wb = XLSX.utils.book_new();
-//   XLSX.utils.book_append_sheet(wb, ws, "clients_abroad");
-//   XLSX.writeFile(wb, fileName);
-// };
+const exportToExcel = () => {
+  const data = dataCopy.value;
+  const fileName = "clients.xlsx";
+  const ws = XLSX.utils.json_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "clients_abroad");
+  XLSX.writeFile(wb, fileName);
+};
 
 const isChecked = (id) => {
   return selectedItems.value.includes(id);
@@ -225,6 +225,20 @@ const handleRowsPerPageChange = ({ target }) => {
 </script>
 
 <style scoped>
+.upper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+.btn-export {
+  padding: 5px 10px;
+  border: 1px solid #ececec;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.15s linear;
+}
 .table-container {
   overflow-x: auto;
 }
