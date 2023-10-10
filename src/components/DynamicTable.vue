@@ -1,10 +1,20 @@
 <template>
   <div>
-    <!-- search -->
-    <InputSearch
-      v-model="searchQuery"
-      @update:modelValue="handleInputSearchUpdate($event)"
+    <!-- edit modal -->
+    <EditModal
+      v-if="isEditModalOpen"
+      :item="currentEditItem"
+      @handle-update="handleUpdate($event)"
     />
+    <div>
+      <!-- search -->
+      <InputSearch
+        v-model="searchQuery"
+        @update:modelValue="handleInputSearchUpdate($event)"
+      />
+      <!-- button to export table to excel -->
+      <!-- <button @click="exportToExcel">Export to excel</button> -->
+    </div>
     <div class="table-container">
       <table>
         <thead>
@@ -84,7 +94,9 @@
 
 <script setup>
 import { computed, defineProps, ref, defineEmits, watch } from "vue";
+// import * as XLSX from "xlsx";
 import InputSearch from "./InputSearch.vue";
+import EditModal from "./EditModal.vue";
 
 const props = defineProps({
   headers: {
@@ -125,6 +137,8 @@ const areAllSelected = ref(false);
 const openedAction = ref(null);
 const searchQuery = ref("");
 const filteredKeys = ["name", "phone", "email", "company"];
+const isEditModalOpen = ref(false);
+const currentEditItem = ref(null);
 
 watch(
   () => props.data,
@@ -144,6 +158,15 @@ const handleInputSearchUpdate = (value) => {
   });
   console.log(dataCopy.value);
 };
+
+// const exportToExcel = () => {
+//   const data = dataCopy.value;
+//   const fileName = "clients.xlsx";
+//   const ws = XLSX.utils.json_to_sheet(data);
+//   const wb = XLSX.utils.book_new();
+//   XLSX.utils.book_append_sheet(wb, ws, "clients_abroad");
+//   XLSX.writeFile(wb, fileName);
+// };
 
 const isChecked = (id) => {
   return selectedItems.value.includes(id);
@@ -179,6 +202,17 @@ const setSelectedItems = (id) => {
 
 const setOpenedAction = (id) => {
   openedAction.value = openedAction.value === id ? null : id;
+};
+
+const handleEditItem = (item) => {
+  currentEditItem.value = item;
+  isEditModalOpen.value = true;
+};
+
+const handleUpdate = (value) => {
+  isEditModalOpen.value = false;
+  emit("updateItem", value);
+  openedAction.value = null;
 };
 
 const handleDeleteItem = (item) => {
